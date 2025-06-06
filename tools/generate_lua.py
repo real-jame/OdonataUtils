@@ -81,10 +81,10 @@ local modules = {{
 """
 
 for m in modules:
-    escaped_source = m["source"].replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
+    escaped_source = m["source"].replace("\\", "\\\\").replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n")
     script += f"{{Name = '{m['name']}', Source = '{escaped_source}'}},\n"
 
-escaped_main = main_source.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
+escaped_main = main_source.replace("\\", "\\\\").replace("\'", "\\\'").replace("\"", "\\\"").replace("\n", "\\n")
 
 script += f"""}}
 

@@ -32,40 +32,57 @@ print(string.format("Initializing OdonataUtils %s", VERSION))
 _G.o = nil
 
 for _, child in pairs(script:GetChildren()) do
-	if child.className == "Script" then
-		child.Disabled = true
-	end
+    if child.className == "Script" then
+        child.Disabled = true
+    end
 end
 
 _G.o = {
-	--Child scripts use this to add their code to the library.
-	--To write a module, variables and functions are thrown into the exported table.
-	--A separate "meta" table will be handled by OdonataUtils itself. Currently, there is only one thing. A function named "BackgroundService" will be ran in the background by this script.
-	--This allows the GUI script to actively detect and center UI, for example.
-	 ExportModule = function(self, moduleName, export, meta)
-		if moduleName and export and type(moduleName) == "string" and type(export) == "table" and not _G.o[moduleName] then
-			_G.o[moduleName] = export
-			print(string.format("Imported Odonata module %s", moduleName))
-		else
-			print(string.format("Importing Odonata module %s failed", tostring(moduleName)))
-			return
-		end
-		
-		--Process meta contents
-		if meta and meta["BackgroundService"] and type(exportedMeta.BackgroundService) == "function" then
-			print("Starting background service for Odonata module " .. moduleName)			
-			Spawn(meta)
-		end
-	end,
-	
-	GetEnvironment = function(self) return game.Players.LocalPlayer == nil and "Server" or "Client" end,
+    --Child scripts use this to add their code to the library.
+    --To write a module, variables and functions are thrown into the exported table.
+    --A separate "meta" table will be handled by OdonataUtils itself. Currently, there is only one thing. A function named "BackgroundService" will be ran in the background by this script.
+    --This allows the GUI script to actively detect and center UI, for example.
+    ExportModule = function(_, moduleName, export, meta)
+        if moduleName and export and type(moduleName) == "string" and type(export) == "table" and not _G.o[moduleName] then
+            _G.o[moduleName] = export
+            print(string.format("Imported Odonata module %s", moduleName))
+        else
+            print(string.format("Importing Odonata module %s failed", tostring(moduleName)))
+            return
+        end
+
+        --Process meta contents
+        if meta and meta["BackgroundService"] and type(exportedMeta.BackgroundService) == "function" then
+            print("Starting background service for Odonata module " .. moduleName)
+            Spawn(meta)
+        end
+    end,
+
+    SupportedFeatures = {
+        warn = pcall(warn, "OdonataUtils test warning") and true or false,
+    },
+
+    GetEnvironment = function(_)
+        return game.Players.LocalPlayer == nil and "Server" or "Client"
+    end,
+
+    Error = function(_, message)
+        error(string.format("OdonataUtils Error: %s", tostring(message)), 2)
+    end,
+
+    Warn = function(_, message)
+        if _G.o.SupportedFeatures.warn then
+            warn(string.format("OdonataUtils Warning: %s", tostring(message)))
+        else
+            print(string.format("OdonataUtils Warning: %s", tostring(message)))
+        end
+    end,
 }
 
 for _, child in pairs(script:GetChildren()) do
-	if child.className == "Script" then
-		child.Disabled = false
-	end
+    if child.className == "Script" then
+        child.Disabled = false
+    end
 end
-
 
 print("Loaded OdonataUtils!")
