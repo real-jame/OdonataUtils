@@ -1,12 +1,16 @@
 repeat wait() until _G.o
 
 local export = {
+    ---Store a UDim2 as a Model containing Scale and Offset Vector3Value objects.
+    ---The UDim2Value object type was added later, so this is a workaround.
+    ---@param name string
+    ---@param value userdata --[[UDim2]]
+    ---@return userdata --[[Instance.Model]]
     CreateUDim2Value = function(_, name, value)
         if not value or type(value) ~= "userdata" then
             _G.o:Error("Invalid UDim2 provided")
         end
 
-        -- UDim2Value doesn't exist yet so this is a workaround with 2 separate Vector3 values storing Scale and Offset separately in a Model. (Vector2Value doesn't exist yet either)
         local container = Instance.new("Model")
         container.Name = name or "UDim2Value"
 
@@ -23,7 +27,9 @@ local export = {
         return container
     end,
 
-    --Set the value of a UDim2Value Model
+    ---Update a UDim2Value Model with a new UDim2.
+    ---@param udim2Value userdata --[[Instance.Model]]
+    ---@param value userdata --[[UDim2]]
     SetUDim2Value = function(_, udim2Value, value)
         if not udim2Value or not udim2Value:IsA("Model") then
             _G.o:Error("Invalid UDim2Value Model provided")
@@ -40,7 +46,9 @@ local export = {
         offset.Value = Vector3.new(value.X.Offset, value.Y.Offset, 0)
     end,
 
-    --Get a UDim2 object from a UDim2Value Model
+    ---Get a UDim2 value from a UDim2Value Model.
+    ---@param udim2Value userdata --[[Instance.Model]]
+    ---@return userdata --[[UDim2]]
     GetUDim2Value = function(_, udim2Value)
         if not udim2Value or not udim2Value:IsA("Model") then
             _G.o:Error("Invalid UDim2Value Model provided")

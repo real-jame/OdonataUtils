@@ -59,7 +59,10 @@ _G.o = {
     end,
 
     SupportedFeatures = {
-        warn = pcall(warn, "OdonataUtils test warning") and true or false,
+        warn = (warn ~= nil and  true or false),
+        Instance = {
+            Destroy = (game.Destroy ~= nil and true or false),
+        }
     },
 
     GetEnvironment = function(_)
