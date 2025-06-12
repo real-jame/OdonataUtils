@@ -74,7 +74,7 @@ local function HandleOldInstall(parent)
     end
 end
 HandleOldInstall(game.Workspace)
-HandleOldInstall(game.StarterGui)
+HandleOldInstall(game.StarterPack)
 
 local mainSource = ""
 local modules = {{
@@ -108,7 +108,7 @@ local function Install(parent, scriptType)
     main.Parent = parent
 end
 Install(game.Workspace, "Script")
-Install(game.StarterGui, "LocalScript")
+Install(game.StarterPack, "LocalScript")
 print("OdonataUtils installed successfully!")
 """
 
