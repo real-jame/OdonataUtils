@@ -17,3 +17,5 @@ local export = {
         end
     end
 }
+
+_G.o:ExportModule(script.Name, export)
