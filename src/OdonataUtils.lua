@@ -59,9 +59,9 @@ _G.o = {
     end,
 
     SupportedFeatures = {
-        warn = (warn ~= nil and  true or false),
+        warn = (warn ~= nil and true or false),
         Instance = {
-            Destroy = (game.Destroy ~= nil and true or false),
+            Destroy = (pcall(function() return game.Destroy ~= nil end) and true or false),
         }
     },
 
