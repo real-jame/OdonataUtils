@@ -1,7 +1,5 @@
 repeat wait() until _G.o
 
-local Debris = game:GetService("Debris")
-
 local export = {
     ---Calls instance:Destroy() on supported versions (2011+)
     ---On older versions, falls back to :Remove().
