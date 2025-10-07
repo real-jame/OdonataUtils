@@ -110,6 +110,7 @@ end
 Install(game.Workspace, "Script")
 Install(game.StarterPack, "LocalScript")
 print("OdonataUtils installed successfully!")
+print("NOTE: Immediately running the place (not play solo) will undo the install, so please move a part or something to give Studio an action to save before you Run the place.")
 """
 
 os.makedirs(dist_dir, exist_ok=True)

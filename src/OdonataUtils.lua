@@ -40,21 +40,16 @@ end
 _G.o = {
     --Child scripts use this to add their code to the library.
     --To write a module, variables and functions are thrown into the exported table.
-    --A separate "meta" table will be handled by OdonataUtils itself. Currently, there is only one thing. A function named "BackgroundService" will be ran in the background by this script.
-    --This allows the GUI script to actively detect and center UI, for example.
-    ExportModule = function(_, moduleName, export, meta)
+    ---@param moduleName string
+    ---@param export table
+    ---@return nil
+    ExportModule = function(_, moduleName, export)
         if moduleName and export and type(moduleName) == "string" and type(export) == "table" and not _G.o[moduleName] then
             _G.o[moduleName] = export
-            print(string.format("Imported Odonata module %s", moduleName))
+            _G.o:Log(string.format("Imported Odonata module %s", moduleName), "root")
         else
-            print(string.format("Importing Odonata module %s failed", tostring(moduleName)))
+            _G.o:Log(string.format("Importing Odonata module %s failed", tostring(moduleName)), "root")
             return
-        end
-
-        --Process meta contents
-        if meta and meta["BackgroundService"] and type(exportedMeta.BackgroundService) == "function" then
-            print("Starting background service for Odonata module " .. moduleName)
-            Spawn(meta)
         end
     end,
 
@@ -62,18 +57,51 @@ _G.o = {
         warn = (warn ~= nil and true or false),
         Instance = {
             Destroy = (pcall(function() return game.Destroy ~= nil end) and true or false),
+            WaitForChild = (pcall(function() return game.WaitForChild ~= nil end) and true or false)
         }
     },
 
+    ---@return nil
     GetEnvironment = function(_)
         return game.Players.LocalPlayer == nil and "Server" or "Client"
     end,
 
-    Error = function(_, message)
+    ---@param message string
+    ---@param moduleName? string
+    ---@return nil
+    Log = function(_, message, moduleName)
+        if moduleName then
+            message = string.format("[%s] %s", moduleName, message)
+        end
+        if _G.o.GetEnvironment() == "Client" then
+            message = string.format("[local] %s", message)
+        end
+        print(message)
+    end,
+
+    ---@param message string
+    ---@param moduleName? string
+    ---@return nil
+    Error = function(_, message, moduleName)
+        if moduleName then
+            message = string.format("[%s] %s", moduleName, message)
+        end
+        if _G.o.GetEnvironment() == "Client" then
+            message = string.format("[local] %s", message)
+        end
         error(string.format("OdonataUtils Error: %s", tostring(message)), 2)
     end,
 
-    Warn = function(_, message)
+    ---@param message string
+    ---@param moduleName? string
+    ---@return nil
+    Warn = function(_, message, moduleName)
+        if moduleName then
+            message = string.format("[%s] %s", moduleName, message)
+        end
+        if _G.o.GetEnvironment() == "Client" then
+            message = string.format("[local] %s", message)
+        end
         if _G.o.SupportedFeatures.warn then
             warn(string.format("OdonataUtils Warning: %s", tostring(message)))
         else
@@ -88,4 +116,14 @@ for _, child in pairs(script:GetChildren()) do
     end
 end
 
-print("Loaded OdonataUtils!")
+_G.o:Log("Loaded OdonataUtils!", "root")
+
+--[[module template:
+repeat wait() until _G.o
+
+local export = {
+
+}
+
+_G.o:ExportModule(script.Name, export)
+--]]

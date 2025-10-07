@@ -1,6 +1,17 @@
 # OdonataUtils
 A library for old Roblox gamedev that fills some, but not all, of the gaps
 
+Description TODO.
+
+## Plugins
+
+This repo also contains useful plugins for game development.
+They are currently only distributed as plugins, so can only be used in 2011+ versions of Studio.
+
+TODO: The build script will eventually generate Lua scripts out of them that can be ran in older versions of Studio.
+
+TODO: install guide.
+
 ## Building
 
 Install Python and clone the repository, then run the Python script to generate a Lua file you can run in Roblox Studio to add the library to your game.
